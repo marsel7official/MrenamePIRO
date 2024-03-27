@@ -70,16 +70,42 @@ async def refunc(client, message):
 
 
 
+
 @Client.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):    
+    prefix = await jishubotz.get_prefix(update.message.chat.id)
+    suffix = await jishubotz.get_suffix(update.message.chat.id)
     new_name = update.message.text
-    new_filename = new_name.split(":-")[1]
+    new_filename_ = new_name.split(":-")[1]
+
+    try:
+        if prefix and suffix:
+            shorted = new_filename_[:-4:]
+            extension = new_filename_[-4::]
+            new_filename = f"{prefix} {shorted} {suffix}{extension}"
+        
+        elif prefix:
+            shorted = new_filename_[:-4:]
+            extension = new_filename_[-4::]
+            new_filename = f"{prefix} {shorted}{extension}"
+        
+        elif suffix:
+            shorted = new_filename_[:-4:]
+            extension = new_filename_[-4::]
+            new_filename = f"{shorted} {suffix}{extension}"
+        
+        else:
+            new_filename = new_filename_
+    except:
+        await update.message.edit("⚠️ Something Went Wrong Can't Able To Set Prefix Or Suffix ☹️ \n\n**Contact My Creator** : @MadflixOfficials")
+    
+        
     file_path = f"downloads/{new_filename}"
     file = update.message.reply_to_message
 
-    ms = await update.message.edit("Tʀyɪɴɢ Tᴏ Dᴏᴡɴʟᴏᴀᴅɪɴɢ....")    
+    ms = await update.message.edit("`Trying To Downloading`")    
     try:
-     	path = await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram,progress_args=("Dᴏᴡɴʟᴏᴀᴅ Sᴛᴀʀᴛᴇᴅ....", ms, time.time()))                    
+     	path = await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram,progress_args=("`Download Started....`", ms, time.time()))                    
     except Exception as e:
      	return await ms.edit(e)
      	     
@@ -93,14 +119,14 @@ async def doc(bot, update):
     ph_path = None
     user_id = int(update.message.chat.id) 
     media = getattr(file, file.media.value)
-    c_caption = await db.get_caption(update.message.chat.id)
-    c_thumb = await db.get_thumbnail(update.message.chat.id)
+    c_caption = await jishubotz.get_caption(update.message.chat.id)
+    c_thumb = await jishubotz.get_thumbnail(update.message.chat.id)
 
     if c_caption:
          try:
              caption = c_caption.format(filename=new_filename, filesize=humanbytes(media.file_size), duration=convert(duration))
          except Exception as e:
-             return await ms.edit(text=f"Yᴏᴜʀ Cᴀᴩᴛɪᴏɴ Eʀʀᴏʀ Exᴄᴇᴩᴛ Kᴇyᴡᴏʀᴅ Aʀɢᴜᴍᴇɴᴛ ●> ({e})")             
+             return await ms.edit(text=f"Your Caption Error Except Keyword Argument: ({e})")             
     else:
          caption = f"**{new_filename}**"
  
@@ -114,7 +140,7 @@ async def doc(bot, update):
          img.resize((320, 320))
          img.save(ph_path, "JPEG")
 
-    await ms.edit("Tʀyɪɴɢ Tᴏ Uᴩʟᴏᴀᴅɪɴɢ....")
+    await ms.edit("`Trying To Uploading`")
     type = update.data.split("_")[1]
     try:
         if type == "document":
@@ -124,7 +150,7 @@ async def doc(bot, update):
                 thumb=ph_path, 
                 caption=caption, 
                 progress=progress_for_pyrogram,
-                progress_args=("Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....", ms, time.time()))
+                progress_args=("`Upload Started....`", ms, time.time()))
         elif type == "video": 
             await bot.send_video(
 		update.message.chat.id,
@@ -133,7 +159,7 @@ async def doc(bot, update):
 		thumb=ph_path,
 		duration=duration,
 	        progress=progress_for_pyrogram,
-		progress_args=("Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....", ms, time.time()))
+		progress_args=("`Upload Started....`", ms, time.time()))
         elif type == "audio": 
             await bot.send_audio(
 		update.message.chat.id,
@@ -142,17 +168,27 @@ async def doc(bot, update):
 		thumb=ph_path,
 		duration=duration,
 	        progress=progress_for_pyrogram,
-	        progress_args=("Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....", ms, time.time()))
+	        progress_args=("`Upload Started....`", ms, time.time()))
     except Exception as e:          
         os.remove(file_path)
         if ph_path:
             os.remove(ph_path)
-        return await ms.edit(f" Eʀʀᴏʀ {e}")
+        return await ms.edit(f" Error {e}")
  
     await ms.delete() 
     os.remove(file_path) 
     if ph_path: os.remove(ph_path) 
 
+
+
+
+
+
+
+# Jishu Developer 
+# Don't Remove Credit 🥺
+# Telegram Channel @JishuBotz
+# Developer @JishuDeveloper
 
 
 
