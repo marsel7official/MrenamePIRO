@@ -77,9 +77,9 @@ async def doc(bot, update):
     file_path = f"downloads/{new_filename}"
     file = update.message.reply_to_message
 
-    ms = await update.message.edit("Tʀyɪɴɢ Tᴏ Dᴏᴡɴʟᴏᴀᴅɪɴɢ....")    
+    ms = await update.message.edit("ℙ𝕒𝕟𝕕𝕒𝕎𝕖𝕡 Tʀyɪɴɢ Tᴏ Dᴏᴡɴʟᴏᴀᴅɪɴɢ....")    
     try:
-     	path = await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram,progress_args=("Dᴏᴡɴʟᴏᴀᴅ Sᴛᴀʀᴛᴇᴅ....", ms, time.time()))                    
+     	path = await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram,progress_args=("File Dᴏᴡɴʟᴏᴀᴅ Sᴛᴀʀᴛᴇᴅ....", ms, time.time()))                    
     except Exception as e:
      	return await ms.edit(e)
      	     
@@ -114,7 +114,7 @@ async def doc(bot, update):
          img.resize((320, 320))
          img.save(ph_path, "JPEG")
 
-    await ms.edit("Tʀyɪɴɢ Tᴏ Uᴩʟᴏᴀᴅɪɴɢ....")
+    await ms.edit("ℙ𝕒𝕟𝕕𝕒𝕎𝕖𝕡 File Tʀyɪɴɢ Tᴏ Uᴩʟᴏᴀᴅɪɴɢ....")
     type = update.data.split("_")[1]
     try:
         if type == "document":
@@ -152,8 +152,3 @@ async def doc(bot, update):
     await ms.delete() 
     os.remove(file_path) 
     if ph_path: os.remove(ph_path) 
-
-
-
-
-
